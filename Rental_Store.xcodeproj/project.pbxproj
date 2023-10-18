@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		635111B32AE0906E008E266C /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635111B22AE0906E008E266C /* HomeView.swift */; };
+		635111B52AE092FE008E266C /* EquipementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635111B42AE092FE008E266C /* EquipementView.swift */; };
+		635111B72AE0931B008E266C /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635111B62AE0931B008E266C /* UserView.swift */; };
+		635111B92AE0934C008E266C /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635111B82AE0934C008E266C /* HomeViewModel.swift */; };
 		63F4B7EB2ADD760900AD2B1B /* Rental_StoreApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F4B7EA2ADD760900AD2B1B /* Rental_StoreApp.swift */; };
 		63F4B7ED2ADD760900AD2B1B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F4B7EC2ADD760900AD2B1B /* ContentView.swift */; };
 		63F4B7EF2ADD760A00AD2B1B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63F4B7EE2ADD760A00AD2B1B /* Assets.xcassets */; };
@@ -14,6 +18,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		635111B22AE0906E008E266C /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		635111B42AE092FE008E266C /* EquipementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EquipementView.swift; sourceTree = "<group>"; };
+		635111B62AE0931B008E266C /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
+		635111B82AE0934C008E266C /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		63F4B7E72ADD760900AD2B1B /* Rental_Store.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rental_Store.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63F4B7EA2ADD760900AD2B1B /* Rental_StoreApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rental_StoreApp.swift; sourceTree = "<group>"; };
 		63F4B7EC2ADD760900AD2B1B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -32,6 +40,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		635111AF2AE08FAB008E266C /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				635111B22AE0906E008E266C /* HomeView.swift */,
+				635111B42AE092FE008E266C /* EquipementView.swift */,
+				635111B62AE0931B008E266C /* UserView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		635111B02AE08FBC008E266C /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				635111B82AE0934C008E266C /* HomeViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		635111B12AE08FCC008E266C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		63F4B7DE2ADD760900AD2B1B = {
 			isa = PBXGroup;
 			children = (
@@ -51,6 +84,9 @@
 		63F4B7E92ADD760900AD2B1B /* Rental_Store */ = {
 			isa = PBXGroup;
 			children = (
+				635111B12AE08FCC008E266C /* Models */,
+				635111B02AE08FBC008E266C /* ViewModels */,
+				635111AF2AE08FAB008E266C /* Views */,
 				63F4B7EA2ADD760900AD2B1B /* Rental_StoreApp.swift */,
 				63F4B7EC2ADD760900AD2B1B /* ContentView.swift */,
 				63F4B7EE2ADD760A00AD2B1B /* Assets.xcassets */,
@@ -138,7 +174,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				63F4B7ED2ADD760900AD2B1B /* ContentView.swift in Sources */,
+				635111B92AE0934C008E266C /* HomeViewModel.swift in Sources */,
+				635111B32AE0906E008E266C /* HomeView.swift in Sources */,
+				635111B72AE0931B008E266C /* UserView.swift in Sources */,
 				63F4B7EB2ADD760900AD2B1B /* Rental_StoreApp.swift in Sources */,
+				635111B52AE092FE008E266C /* EquipementView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
