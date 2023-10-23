@@ -8,12 +8,41 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var selectedTab = 0
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        TabView(selection: $selectedTab) {
+            NavigationView {
+                Text("Home")
+                    .navigationTitle("Home")
+            }
+            .tabItem {
+                Label("Home", systemImage: "house")
+            }
+            .tag(0)
+
+            NavigationView {
+                Text("Inventory")
+                    .navigationTitle("Inventory")
+            }
+            .tabItem {
+                Label("Inventory", systemImage: "list.dash")
+            }
+            .tag(1)
+
+            NavigationView {
+                Text("User's View")
+                    .navigationTitle("User's View")
+            }
+            .tabItem {
+                Label("User's View", systemImage: "person")
+            }
+            .tag(2)
+        }
     }
 }
 
-struct Home_Previews: PreviewProvider {
+struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
     }
