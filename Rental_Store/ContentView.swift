@@ -8,16 +8,31 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var selectedTab = 0
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        TabView(selection: $selectedTab) {
+            HomeView()
+                .tabItem {
+                    Label("Home", systemImage: "house")
+                }
+                .tag(0)
+
+            EquipementView()
+                .tabItem {
+                    Label("Equipment", systemImage: "list.dash")
+                }
+                .tag(1)
+
+            UserView()
+                .tabItem {
+                    Label("User's View", systemImage: "person")
+                }
+                .tag(2)
         }
-        .padding()
     }
 }
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
