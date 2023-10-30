@@ -7,11 +7,21 @@
 
 import SwiftUI
 
+import SwiftUI
+
 struct CreateGroup: View {
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Text("Create Group")
+            // Implement an input field for group name
+            Button("Create") {
+                // Create the group and dismiss the view
+            }
+        }
     }
 }
+
 
 struct CreateGroup_Previews: PreviewProvider {
     static var previews: some View {

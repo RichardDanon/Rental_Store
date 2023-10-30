@@ -6,3 +6,12 @@
 //
 
 import Foundation
+
+class RentingViewModel: ObservableObject {
+    @Published var equipmentGroups: [EquipmentGroup] = []
+    @Published var users: [User] = []
+
+    init() {
+        // Initialize your mock data here
+    }
+}
