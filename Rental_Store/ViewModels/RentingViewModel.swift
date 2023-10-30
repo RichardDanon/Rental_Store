@@ -1,129 +1,33 @@
-//
-//  RentingViewModel.swift
-//  Rental_Store
-//
-//  Created by Richard on 2023-10-30.
-//
-
 import Foundation
 
 class RentingViewModel: ObservableObject {
-    @Published var equipmentGroups: [EquipmentGroup] = []
-    @Published var users: [User] = []
 
-    init() {
-        // Initialize your mock data here
-    }
-}
+    // Mock data for demonstration
+    @Published var equipmentGroups: [EquipmentGroup] = [
+        EquipmentGroup(id: "1", name: "Group 1", items: [
+            Equipment(id: "1-1", name: "Item 1", availability: .free, usages: []),
+            Equipment(id: "1-2", name: "Item 2", availability: .rented, usages: [Usage(userName: "Alice", numberOfRentals: 2)])
+        ])
+    ]
 
-// Equipement View
-class EquipmentViewModel {
-    var equipmentGroups: [EquipmentGroup] = []
+    @Published var users: [User] = [
+        User(name: "Alice", phoneNumber: "123-456-7890", email: "alice@email.com", isRenting: true, rentingItems: []),
+        User(name: "Bob", phoneNumber: "098-765-4321", email: "bob@email.com", isRenting: false, rentingItems: [])
+    ]
 
-    // Fetch equipment groups from your model.
-    func fetchEquipmentGroups() {
-        // Implement fetching logic here and populate equipmentGroups.
-    }
-
-    // Create a new equipment group.
-    func createEquipmentGroup(groupName: String) {
-        // Implement creation logic and add the new group to equipmentGroups.
+    // Fetch an equipment group by its ID
+    func fetchEquipmentGroup(byID id: String) -> EquipmentGroup? {
+        return equipmentGroups.first { $0.id == id }
     }
 
-    // Delete an equipment group.
-    func deleteEquipmentGroup(at index: Int) {
-        // Implement deletion logic and remove the group at the specified index.
+    // Fetch a user by name
+    func fetchUser(byName name: String) -> User? {
+        return users.first { $0.name == name }
     }
 
-    // Navigate to EquipmentDetails.
-    func navigateToEquipmentDetails(equipment: Equipment) {
-        // Implement navigation logic to EquipmentDetails view.
-    }
-
-    // Navigate to CreateGroup.
-    func navigateToCreateGroup() {
-        // Implement navigation logic to CreateGroup view.
-    }
-}
-
-
-//Equipement Details
-class EquipmentDetailsViewModel {
-    var selectedEquipment: Equipment?
-
-    // Display availability and usages of selected equipment.
-    func displayAvailability() -> Availability {
-        return selectedEquipment?.availability ?? .free
-    }
-
-    func displayUsages() -> [Usage] {
-        return selectedEquipment?.usages ?? []
-    }
-
-    // Update availability and usages.
-    func updateAvailability(newAvailability: Availability) {
-        // Implement updating logic for availability.
-    }
-
-    func updateUsages(newUsages: [Usage]) {
-        // Implement updating logic for usages.
-    }
-
-    // Navigate back to EquipementView.
-    func navigateBack() {
-        // Implement navigation logic to return to EquipementView.
-    }
-}
-
-//User View
-class UserViewModel {
-    var users: [User] = []
-
-    // Fetch user data from your model.
-    func fetchUserData() {
-        // Implement fetching user data logic and populate users.
-    }
-
-    // Navigate to UserDetails.
-    func navigateToUserDetails(user: User) {
-        // Implement navigation logic to UserDetails view.
-    }
-}
-
-// User Details View
-class UserDetailsViewModel {
-    var selectedUser: User?
-
-    // Display user details and rented items.
-    func displayUserDetails() -> (phoneNumber: String, email: String, isRenting: Bool) {
-        let user = selectedUser
-        return (user?.phoneNumber ?? "", user?.email ?? "", user?.isRenting ?? false)
-    }
-
-    func displayRentedItems() -> [Equipment] {
-        return selectedUser?.rentingItems ?? []
-    }
-
-    // Update the user's renting status.
-    func updateRentingStatus(isRenting: Bool) {
-        // Implement updating logic for the user's renting status.
-    }
-
-    // Navigate back to UserView.
-    func navigateBack() {
-        // Implement navigation logic to return to UserView.
-    }
-}
-
-//Create group view
-class CreateGroupViewModel {
-    // Create a new equipment group in the model.
-    func createNewGroup(groupName: String) {
-        // Implement group creation logic in the model.
-    }
-
-    // Navigate back to EquipementView.
-    func navigateBack() {
-        // Implement navigation logic to return to EquipementView.
+    // Create a new equipment group
+    func createEquipmentGroup(withName name: String) {
+        let newGroup = EquipmentGroup(id: UUID().uuidString, name: name, items: [])
+        equipmentGroups.append(newGroup)
     }
 }
