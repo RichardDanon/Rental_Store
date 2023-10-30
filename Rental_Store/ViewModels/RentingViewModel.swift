@@ -17,7 +17,7 @@ class RentingViewModel: ObservableObject {
 }
 
 // Equipement View
-class EquipementViewModel {
+class EquipmentViewModel {
     var equipmentGroups: [EquipmentGroup] = []
 
     // Fetch equipment groups from your model.
@@ -48,7 +48,7 @@ class EquipementViewModel {
 
 
 //Equipement Details
-class EquipementDetailsViewModel {
+class EquipmentDetailsViewModel {
     var selectedEquipment: Equipment?
 
     // Display availability and usages of selected equipment.

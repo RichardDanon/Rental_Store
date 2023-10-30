@@ -18,7 +18,7 @@ struct ContentView: View {
                 }
                 .tag(0)
 
-            EquipementView()
+            EquipmentView()
                 .tabItem {
                     Label("Equipment", systemImage: "list.dash")
                 }
