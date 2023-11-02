@@ -4,7 +4,10 @@ struct CreateGroup: View {
     @State private var groupName = ""
     @State private var showEquipmentView = false
     @State private var showAlert = false
-    
+    @Environment(\.presentationMode) var presentationMode
+
+    let equipmentViewModel = RentingViewModel()
+
     var body: some View {
         NavigationView {
             GeometryReader { geometry in
@@ -22,11 +25,12 @@ struct CreateGroup: View {
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .padding(.horizontal, 20)
                         
-                        NavigationLink("", destination: EquipmentView(), isActive: $showEquipmentView)
+                        NavigationLink("", destination: EquipmentView(viewModel: equipmentViewModel), isActive: $showEquipmentView)
                         
                         Button(action: {
-                            // Implement your logic for creating a new group with groupName
-                            // Then show the alert.
+
+                            equipmentViewModel.createEquipmentGroup(withName: groupName)
+
                             showAlert = true
                         }) {
                             Text("Submit")
@@ -40,7 +44,7 @@ struct CreateGroup: View {
                         }
                         
                         Button(action: {
-                            // Implement your logic for canceling group creation and navigating back to EquipmentView.
+
                             showEquipmentView = true
                         }) {
                             Text("Dismiss")
@@ -58,12 +62,13 @@ struct CreateGroup: View {
                 title: Text("Group Created Successfully"),
                 message: Text("Your group has been created successfully."),
                 primaryButton: .default(Text("OK")) {
-                    // Continue your operation (navigate to EquipmentView or perform other actions).
+
                     showEquipmentView = true
                 },
                 secondaryButton: .cancel()
             )
         }
+        .navigationBarHidden(true)
     }
 }
 

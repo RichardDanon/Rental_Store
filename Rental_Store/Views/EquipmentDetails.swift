@@ -10,48 +10,50 @@ struct EquipmentDetails: View {
     }
     
     var body: some View {
-        VStack {
-            HStack {
-                Text("\(equipment.name) # \(equipment.id)")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .foregroundColor(.primary)
-                    .padding(.top, 20)
-                Spacer()
-                Image(systemName: "trash")
-                    .foregroundColor(.red)
-            }
-            .padding(.horizontal, 20)
-            
-            CardView(title: "Availabilities") {
-                Picker("", selection: $selectedAvailability) {
-                    Text("Free").tag(Availability.free)
-                    Text("Rented").tag(Availability.rented)
+        NavigationView{
+            VStack {
+                HStack {
+                    Text("\(equipment.name) # \(equipment.id)")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(.primary)
+                        .padding(.top, 20)
+                    Spacer()
+                    Image(systemName: "trash")
+                        .foregroundColor(.red)
                 }
-                .pickerStyle(SegmentedPickerStyle())
-            }
-            
-            CardView(title: "Usages") {
-                ForEach(equipment.usages, id: \.userName) { usage in
-                    HStack {
-                        Text("Last User: \(usage.userName)")
-                            .font(.body)
-                            .foregroundColor(.primary)
-                        Spacer()
-                        Text("Number of Rentals: \(usage.numberOfRentals)")
-                            .font(.body)
-                            .foregroundColor(.primary)
+                .padding(.horizontal, 20)
+                
+                CardView(title: "Availabilities") {
+                    Picker("", selection: $selectedAvailability) {
+                        Text("Free").tag(Availability.free)
+                        Text("Rented").tag(Availability.rented)
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                }
+                
+                CardView(title: "Usages") {
+                    ForEach(equipment.usages, id: \.userName) { usage in
+                        HStack {
+                            Text("Last User: \(usage.userName)")
+                                .font(.body)
+                                .foregroundColor(.primary)
+                            Spacer()
+                            Text("Number of Rentals: \(usage.numberOfRentals)")
+                                .font(.body)
+                                .foregroundColor(.primary)
+                        }
                     }
                 }
             }
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(Color.white)
+                    .shadow(radius: 10)
+            )
+            .padding()
         }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.white)
-                .shadow(radius: 10)
-        )
-        .padding()
     }
 }
 

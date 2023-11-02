@@ -1,12 +1,14 @@
 import Foundation
 
+
+
 class RentingViewModel: ObservableObject {
 
     // Mock data for demonstration
     @Published var equipmentGroups: [EquipmentGroup] = [
-        EquipmentGroup(id: "1", name: "Group 1", items: [
-            Equipment(id: "1-1", name: "Item 1", availability: .free, usages: []),
-            Equipment(id: "1-2", name: "Item 2", availability: .rented, usages: [Usage(userName: "Alice", numberOfRentals: 2)])
+        EquipmentGroup(id: "1", name: "Baseball", items: [
+            Equipment(id: "2", name: "Baseball", availability: .free, usages: []),
+            Equipment(id: "3", name: "BaseBall", availability: .rented, usages: [Usage(userName: "Alice", numberOfRentals: 2)])
         ])
     ]
 

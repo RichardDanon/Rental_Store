@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var selectedTab = 0
+    let equipmentViewModel = RentingViewModel() // Instantiate the view model
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -18,7 +19,7 @@ struct ContentView: View {
                 }
                 .tag(0)
 
-            EquipmentView()
+            EquipmentView(viewModel: equipmentViewModel)
                 .tabItem {
                     Label("Equipment", systemImage: "list.dash")
                 }
@@ -33,9 +34,9 @@ struct ContentView: View {
     }
 }
 
-
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
     }
 }
+
