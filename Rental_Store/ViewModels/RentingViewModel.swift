@@ -1,7 +1,5 @@
 import Foundation
 
-
-
 class RentingViewModel: ObservableObject {
 
     // Mock data for demonstration
@@ -31,5 +29,22 @@ class RentingViewModel: ObservableObject {
     func createEquipmentGroup(withName name: String) {
         let newGroup = EquipmentGroup(id: UUID().uuidString, name: name, items: [])
         equipmentGroups.append(newGroup)
+    }
+    
+    func getNextEquipmentID(forGroup group: EquipmentGroup) -> String {
+        if let lastItem = group.items.last,
+           let lastIDInt = Int(lastItem.id) {
+            return String(lastIDInt + 1)
+        } else {
+            return "1"
+        }
+    }
+
+    // Add new equipment to an equipment group by group's name
+    func addEquipmentToGroup(groupName: String, equipmentName: String) {
+        if let index = equipmentGroups.firstIndex(where: { $0.name == groupName }) {
+            let newItem = Equipment(id: UUID().uuidString, name: equipmentName, availability: .free, usages: [])
+            equipmentGroups[index].items.append(newItem)
+        }
     }
 }
