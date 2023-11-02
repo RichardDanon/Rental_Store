@@ -11,8 +11,12 @@ class RentingViewModel: ObservableObject {
     ]
 
     @Published var users: [User] = [
-        User(name: "Alice", phoneNumber: "123-456-7890", email: "alice@email.com", isRenting: true, rentingItems: []),
-        User(name: "Bob", phoneNumber: "098-765-4321", email: "bob@email.com", isRenting: false, rentingItems: [])
+        User(name: "Alice", phoneNumber: "123-456-7890", email: "alice@email.com", isRenting: true, rentingItems: [
+            Equipment(id: "3", name: "BaseBall", availability: .rented, usages: [Usage(userName: "Alice", numberOfRentals: 2)])
+        ]),
+        User(name: "Bob", phoneNumber: "098-765-4321", email: "bob@email.com", isRenting: false, rentingItems: []),
+        
+        User(name: "Charlie", phoneNumber: "567-890-1234", email: "charlie@email.com", isRenting: false, rentingItems: [])
     ]
 
     // Fetch an equipment group by its ID

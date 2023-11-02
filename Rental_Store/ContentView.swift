@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var selectedTab = 0
-    let equipmentViewModel = RentingViewModel() // Instantiate the view model
+    let rentingModel = RentingViewModel() // Instantiate the view model
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -19,13 +19,13 @@ struct ContentView: View {
                 }
                 .tag(0)
 
-            EquipmentView(viewModel: equipmentViewModel)
+            EquipmentView(viewModel: rentingModel)
                 .tabItem {
                     Label("Equipment", systemImage: "list.dash")
                 }
                 .tag(1)
 
-            UserView()
+            UserView(viewModel: rentingModel)
                 .tabItem {
                     Label("User's View", systemImage: "person")
                 }
