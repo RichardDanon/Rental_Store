@@ -39,6 +39,16 @@ class RentingViewModel: ObservableObject {
             return "1"
         }
     }
+    
+    // Delete an equipment from the equipment groups by equipment's id
+    func deleteEquipment(equipmentID: String) {
+        for (index, group) in equipmentGroups.enumerated() {
+            if let itemIndex = group.items.firstIndex(where: { $0.id == equipmentID }) {
+                equipmentGroups[index].items.remove(at: itemIndex)
+                break
+            }
+        }
+    }
 
     // Add new equipment to an equipment group by group's name
     func addEquipmentToGroup(groupName: String, equipmentName: String) {

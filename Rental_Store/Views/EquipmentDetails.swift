@@ -3,88 +3,100 @@ import SwiftUI
 struct EquipmentDetails: View {
     var equipment: Equipment
     @State private var selectedAvailability: Availability
+    @State private var showingRentPopup = false
+    @State private var showingDeleteAlert = false
+    @ObservedObject var viewModel: RentingViewModel
+    @State private var selectedUser: User?
+    @State private var numberOfRentals: Int = 0
+    @Environment(\.presentationMode) var presentationMode
     
-    init(equipment: Equipment) {
+    init(equipment: Equipment, viewModel: RentingViewModel) {
         self.equipment = equipment
+        self.viewModel = viewModel
         _selectedAvailability = State(initialValue: equipment.availability)
     }
     
     var body: some View {
-        NavigationView{
-            VStack {
-                HStack {
-                    Text("\(equipment.name) # \(equipment.id)")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .foregroundColor(.primary)
-                        .padding(.top, 20)
-                    Spacer()
+        VStack {
+            HStack {
+                Spacer()
+                Text("\(equipment.name) #\(equipment.id)")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                Spacer()
+                Button(action: {
+                    showingDeleteAlert = true
+                }) {
                     Image(systemName: "trash")
                         .foregroundColor(.red)
                 }
-                .padding(.horizontal, 20)
-                
-                CardView(title: "Availabilities") {
-                    Picker("", selection: $selectedAvailability) {
-                        Text("Free").tag(Availability.free)
-                        Text("Rented").tag(Availability.rented)
-                    }
-                    .pickerStyle(SegmentedPickerStyle())
+                .alert(isPresented: $showingDeleteAlert) {
+                    Alert(title: Text("Delete Item"),
+                          message: Text("Are you sure you want to delete this item?"),
+                          primaryButton: .destructive(Text("Delete")) {
+                        // The actual delete function call
+                        viewModel.deleteEquipment(equipmentID: equipment.id)
+                        presentationMode.wrappedValue.dismiss()
+                    },
+                          secondaryButton: .cancel())
                 }
+                .padding(.trailing, 20)
+            }
+
+            Spacer()
+
+            VStack(alignment: .leading, spacing: 20) {
+                Text("Availabilities")
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                Picker("", selection: $selectedAvailability) {
+                    Text("Free").tag(Availability.free)
+                    Text("Rented").tag(Availability.rented)
+                }
+                .pickerStyle(SegmentedPickerStyle())
                 
-                CardView(title: "Usages") {
-                    ForEach(equipment.usages, id: \.userName) { usage in
-                        HStack {
-                            Text("Last User: \(usage.userName)")
-                                .font(.body)
-                                .foregroundColor(.primary)
-                            Spacer()
-                            Text("Number of Rentals: \(usage.numberOfRentals)")
-                                .font(.body)
-                                .foregroundColor(.primary)
-                        }
-                    }
+                Text("Usages")
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                Text("Last User: \(selectedUser?.name ?? "None")")
+                Text("Number of Rentals: \(numberOfRentals)")
+                Button(action: {
+                    showingRentPopup = true
+                }) {
+                    Text("Rent")
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
                 }
             }
             .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(Color.white)
-                    .shadow(radius: 10)
-            )
-            .padding()
+            .background(RoundedRectangle(cornerRadius: 15).fill(Color.white))
+            .shadow(radius: 5)
+            .padding([.horizontal, .bottom], 20)
+
+            Spacer()
+        }
+        .padding()
+        .actionSheet(isPresented: $showingRentPopup) {
+            ActionSheet(title: Text("Choose a Renter"), buttons: viewModel.users.map { user in
+                .default(Text(user.name)) {
+                    selectedUser = user
+                    numberOfRentals += 1
+                    selectedAvailability = .rented
+                }
+            } + [.cancel()])
         }
     }
 }
-
-struct CardView<Content: View>: View {
-    var title: String
-    var content: Content
-    
-    init(title: String, @ViewBuilder content: () -> Content) {
-        self.title = title
-        self.content = content()
-    }
-    
-    var body: some View {
-        Text(title)
-            .font(.headline)
-            .foregroundColor(.primary)
-            .padding(.horizontal, 20)
-        VStack(alignment: .leading) {
-
-            content
-                .padding(.horizontal, 20)
-        }
-        .padding(20)
-        .background(RoundedRectangle(cornerRadius: 15).fill(Color.white))
-        .shadow(radius: 5)
-    }
-}
-
 
 struct EquipmentDetails_Previews: PreviewProvider {
     static var previews: some View {
-        EquipmentDetails(equipment: Equipment(id: "1", name: "Sample Equipment", availability: .free, usages: [Usage(userName: "User1", numberOfRentals: 5)])
-    )}
+        let mockUsage: [Usage] = [Usage(userName: "Alice", numberOfRentals: 1)]
+        let mockEquipment = Equipment(id: "1", name: "Mock Equipment", availability: .free, usages: mockUsage)
+        
+        let viewModel = RentingViewModel()
+        
+        return EquipmentDetails(equipment: mockEquipment, viewModel: viewModel)
+    }
 }

@@ -2,11 +2,10 @@ import SwiftUI
 
 struct CreateGroup: View {
     @State private var groupName = ""
-    @State private var showEquipmentView = false
     @State private var showAlert = false
     @Environment(\.presentationMode) var presentationMode
 
-    let equipmentViewModel = RentingViewModel()
+    @ObservedObject var equipmentViewModel: RentingViewModel
 
     var body: some View {
         NavigationView {
@@ -25,12 +24,7 @@ struct CreateGroup: View {
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .padding(.horizontal, 20)
                         
-                        NavigationLink("", destination: EquipmentView(viewModel: equipmentViewModel), isActive: $showEquipmentView)
-                        
                         Button(action: {
-
-                            equipmentViewModel.createEquipmentGroup(withName: groupName)
-
                             showAlert = true
                         }) {
                             Text("Submit")
@@ -44,8 +38,7 @@ struct CreateGroup: View {
                         }
                         
                         Button(action: {
-
-                            showEquipmentView = true
+                            self.presentationMode.wrappedValue.dismiss()
                         }) {
                             Text("Dismiss")
                         }
@@ -59,11 +52,11 @@ struct CreateGroup: View {
         .navigationBarHidden(true)
         .alert(isPresented: $showAlert) {
             Alert(
-                title: Text("Group Created Successfully"),
-                message: Text("Your group has been created successfully."),
+                title: Text("Confirm Creation"),
+                message: Text("Do you want to create this group?"),
                 primaryButton: .default(Text("OK")) {
-
-                    showEquipmentView = true
+                    equipmentViewModel.createEquipmentGroup(withName: groupName)
+                    self.presentationMode.wrappedValue.dismiss()
                 },
                 secondaryButton: .cancel()
             )
@@ -74,6 +67,6 @@ struct CreateGroup: View {
 
 struct CreateGroup_Previews: PreviewProvider {
     static var previews: some View {
-        CreateGroup()
+        CreateGroup(equipmentViewModel: RentingViewModel())
     }
 }

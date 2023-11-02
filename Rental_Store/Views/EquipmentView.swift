@@ -34,7 +34,6 @@ struct EquipmentView: View {
                                     .font(.headline)
                                 Spacer()
                                 Button(action: {
-                                    // Logic to add a new item to the current group
                                     let groupName = viewModel.equipmentGroups[index].name
                                     let newID = viewModel.getNextEquipmentID(forGroup: viewModel.equipmentGroups[index])
                                     let newItem = Equipment(id: newID, name: groupName, availability: .free, usages: [])
@@ -58,7 +57,7 @@ struct EquipmentView: View {
 
                             ForEach(viewModel.equipmentGroups[index].items, id: \.id) { equipment in
                                 NavigationLink(
-                                    destination: EquipmentDetails(equipment: equipment),
+                                    destination: EquipmentDetails(equipment: equipment, viewModel: viewModel),
                                     label: {
                                         Text("\(equipment.name) #\(equipment.id)")
                                     }
@@ -75,7 +74,7 @@ struct EquipmentView: View {
                 .padding()
             }
             .navigationBarHidden(true)
-            .background(NavigationLink(destination: CreateGroup(), isActive: $showCreateGroupView) {
+            .background(NavigationLink(destination: CreateGroup(equipmentViewModel: viewModel), isActive: $showCreateGroupView) {
                 EmptyView()
             })
         }
