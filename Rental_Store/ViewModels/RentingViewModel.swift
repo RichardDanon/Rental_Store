@@ -36,20 +36,52 @@ class RentingViewModel: ObservableObject {
     }
     
     func updateEquipmentUsages(equipment: Equipment, userName: String, numberOfRentals: Int) {
+        // Find the group and equipment indices
         if let groupIndex = equipmentGroups.firstIndex(where: { group in
             group.items.contains { $0.id == equipment.id }
         }), let equipmentIndex = equipmentGroups[groupIndex].items.firstIndex(where: { $0.id == equipment.id }) {
-            equipmentGroups[groupIndex].items[equipmentIndex].usages.append(Usage(userName: userName, numberOfRentals: numberOfRentals))
+
+            if let lastUsage = equipment.usages.last {
+                if lastUsage.userName == userName {
+                    // The same user is re-renting the equipment
+                    let updatedUsage = Usage(userName: userName, numberOfRentals: lastUsage.numberOfRentals + numberOfRentals)
+                    equipmentGroups[groupIndex].items[equipmentIndex].usages.removeLast()
+                    equipmentGroups[groupIndex].items[equipmentIndex].usages.append(updatedUsage)
+                } else {
+                    // A different user is renting, so remove the equipment from the previous user's rentingItems list
+                    if let previousUserIndex = users.firstIndex(where: { $0.name == lastUsage.userName }) {
+                        users[previousUserIndex].rentingItems.removeAll { $0.id == equipment.id }
+                    }
+                    // Add new usage entry for the new user
+                    equipmentGroups[groupIndex].items[equipmentIndex].usages.append(Usage(userName: userName, numberOfRentals: numberOfRentals))
+                }
+            } else {
+                // There are no previous usages, so add a new one
+                equipmentGroups[groupIndex].items[equipmentIndex].usages.append(Usage(userName: userName, numberOfRentals: numberOfRentals))
+            }
+            
             equipmentGroups[groupIndex].items[equipmentIndex].availability = .rented
+
+            // Update the user's rentingItems list
+            if let userIndex = users.firstIndex(where: { $0.name == userName }) {
+                if !users[userIndex].rentingItems.contains(where: { $0.id == equipment.id }) {
+                    users[userIndex].rentingItems.append(equipment)
+                }
+            }
+
+            updateIsRentingStatusForUser(userName: userName)
+            equipmentGroups = equipmentGroups
+            users = users
         }
-        
-        if let userIndex = users.firstIndex(where: { $0.name == userName }) {
-            users[userIndex].rentingItems.append(equipment)
-        }
-        
-        equipmentGroups = equipmentGroups
-        users = users
     }
+
+
+    func updateIsRentingStatusForUser(userName: String) {
+        if let userIndex = users.firstIndex(where: { $0.name == userName }) {
+            users[userIndex].isRenting = !users[userIndex].rentingItems.isEmpty
+        }
+    }
+
 
     
     func getNextEquipmentID(forGroup group: EquipmentGroup) -> String {

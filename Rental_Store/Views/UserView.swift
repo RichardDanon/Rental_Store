@@ -5,15 +5,16 @@ struct UserView: View {
     @State private var showAlert = false
     @State private var userToDelete: Int?
     @State private var showEquipmentView = false
+    @State private var selectedUserIndex: Int?
+    @State private var showUserDetails: Bool = false
 
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(alignment: .leading) {
                     Text("Renters")
-                        .font(.system(size: 30))
+                        .font(.system(size: 35))
                         .padding(.leading)
-                        .padding(.vertical)
 
                     ForEach(viewModel.users.indices, id: \.self) { index in
                         VStack(alignment: .leading) {
@@ -21,7 +22,22 @@ struct UserView: View {
                                 Text(viewModel.users[index].name)
                                     .font(.headline)
                                 Spacer()
-                                
+
+                                Button(action: {
+                                    selectedUserIndex = index
+                                    showUserDetails = true
+                                }) {
+                                    Image(systemName: "info.circle")
+                                        .resizable()
+                                        .frame(width: 24, height: 24)
+                                        .foregroundColor(.blue)
+                                }
+
+                                NavigationLink("",
+                                    destination: UserDetails(user: viewModel.users[selectedUserIndex ?? 0], viewModel: viewModel),
+                                    isActive: $showUserDetails
+                                ).opacity(0)
+
                                 Button(action: {
                                     showEquipmentView = true
                                 }) {
@@ -74,6 +90,7 @@ struct UserView: View {
         .navigationBarHidden(true)
     }
 }
+
 
 struct UserView_Previews: PreviewProvider {
     static var previews: some View {
