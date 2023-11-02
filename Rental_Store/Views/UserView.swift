@@ -4,6 +4,7 @@ struct UserView: View {
     @ObservedObject var viewModel: RentingViewModel
     @State private var showAlert = false
     @State private var userToDelete: Int?
+    @State private var showEquipmentView = false // Add this to control the navigation
 
     var body: some View {
         NavigationView {
@@ -20,7 +21,16 @@ struct UserView: View {
                                 Text(viewModel.users[index].name)
                                     .font(.headline)
                                 Spacer()
-                                // Adding delete functionality
+                                
+                                // Modified this button to show the EquipmentView
+                                Button(action: {
+                                    showEquipmentView = true
+                                }) {
+                                    Image(systemName: "plus.circle.fill")
+                                        .resizable()
+                                        .frame(width: 24, height: 24)
+                                }
+
                                 Button(action: {
                                     userToDelete = index
                                     showAlert = true
@@ -45,6 +55,7 @@ struct UserView: View {
                 }
                 .padding()
             }
+            .background(NavigationLink("", destination: EquipmentView(viewModel: viewModel), isActive: $showEquipmentView)) 
         }
         .alert(isPresented: $showAlert) {
             Alert(title: Text("Delete User"),

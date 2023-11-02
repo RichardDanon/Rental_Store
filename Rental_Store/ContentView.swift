@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var selectedTab = 0
-    let rentingModel = RentingViewModel() // Instantiate the view model
+    let rentingModel = RentingViewModel()
 
     var body: some View {
         TabView(selection: $selectedTab) {
