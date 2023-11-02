@@ -42,6 +42,13 @@ class RentingViewModel: ObservableObject {
             equipmentGroups[groupIndex].items[equipmentIndex].usages.append(Usage(userName: userName, numberOfRentals: numberOfRentals))
             equipmentGroups[groupIndex].items[equipmentIndex].availability = .rented
         }
+        
+        if let userIndex = users.firstIndex(where: { $0.name == userName }) {
+            users[userIndex].rentingItems.append(equipment)
+        }
+        
+        equipmentGroups = equipmentGroups
+        users = users
     }
 
     

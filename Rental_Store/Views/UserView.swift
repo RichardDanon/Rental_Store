@@ -4,7 +4,7 @@ struct UserView: View {
     @ObservedObject var viewModel: RentingViewModel
     @State private var showAlert = false
     @State private var userToDelete: Int?
-    @State private var showEquipmentView = false // Add this to control the navigation
+    @State private var showEquipmentView = false
 
     var body: some View {
         NavigationView {
@@ -22,7 +22,6 @@ struct UserView: View {
                                     .font(.headline)
                                 Spacer()
                                 
-                                // Modified this button to show the EquipmentView
                                 Button(action: {
                                     showEquipmentView = true
                                 }) {
@@ -43,8 +42,13 @@ struct UserView: View {
                             .padding()
 
                             ForEach(viewModel.users[index].rentingItems, id: \.id) { item in
-                                Text("\(item.name) #\(item.id)")
-                                    .padding(.vertical, 4)
+                                NavigationLink(
+                                    destination: EquipmentDetails(equipment: item, viewModel: viewModel),
+                                    label: {
+                                        Text("\(item.name) #\(item.id)")
+                                    }
+                                )
+                                .padding(.vertical, 4)
                             }
                         }
                         .padding()
@@ -55,7 +59,7 @@ struct UserView: View {
                 }
                 .padding()
             }
-            .background(NavigationLink("", destination: EquipmentView(viewModel: viewModel), isActive: $showEquipmentView)) 
+            .background(NavigationLink("", destination: EquipmentView(viewModel: viewModel), isActive: $showEquipmentView))
         }
         .alert(isPresented: $showAlert) {
             Alert(title: Text("Delete User"),
