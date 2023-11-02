@@ -35,6 +35,16 @@ class RentingViewModel: ObservableObject {
         equipmentGroups.append(newGroup)
     }
     
+    func updateEquipmentUsages(equipment: Equipment, userName: String, numberOfRentals: Int) {
+        if let groupIndex = equipmentGroups.firstIndex(where: { group in
+            group.items.contains { $0.id == equipment.id }
+        }), let equipmentIndex = equipmentGroups[groupIndex].items.firstIndex(where: { $0.id == equipment.id }) {
+            equipmentGroups[groupIndex].items[equipmentIndex].usages.append(Usage(userName: userName, numberOfRentals: numberOfRentals))
+            equipmentGroups[groupIndex].items[equipmentIndex].availability = .rented
+        }
+    }
+
+    
     func getNextEquipmentID(forGroup group: EquipmentGroup) -> String {
         if let lastItem = group.items.last,
            let lastIDInt = Int(lastItem.id) {

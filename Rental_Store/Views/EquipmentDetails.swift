@@ -14,6 +14,13 @@ struct EquipmentDetails: View {
         self.equipment = equipment
         self.viewModel = viewModel
         _selectedAvailability = State(initialValue: equipment.availability)
+        
+        // Fetch the latest user and number of rentals from the equipment's usages
+        if let lastUsage = equipment.usages.last,
+           let user = viewModel.fetchUser(byName: lastUsage.userName) {
+            _selectedUser = State(initialValue: user)
+            _numberOfRentals = State(initialValue: lastUsage.numberOfRentals)
+        }
     }
     
     var body: some View {
@@ -34,7 +41,6 @@ struct EquipmentDetails: View {
                     Alert(title: Text("Delete Item"),
                           message: Text("Are you sure you want to delete this item?"),
                           primaryButton: .destructive(Text("Delete")) {
-                        // The actual delete function call
                         viewModel.deleteEquipment(equipmentID: equipment.id)
                         presentationMode.wrappedValue.dismiss()
                     },
@@ -80,11 +86,13 @@ struct EquipmentDetails: View {
         .padding()
         .actionSheet(isPresented: $showingRentPopup) {
             ActionSheet(title: Text("Choose a Renter"), buttons: viewModel.users.map { user in
-                .default(Text(user.name)) {
-                    selectedUser = user
-                    numberOfRentals += 1
-                    selectedAvailability = .rented
-                }
+                    .default(Text(user.name)) {
+                        selectedUser = user
+                        numberOfRentals += 1
+                        selectedAvailability = .rented
+                        viewModel.updateEquipmentUsages(equipment: equipment, userName: user.name, numberOfRentals: numberOfRentals)
+                    }
+
             } + [.cancel()])
         }
     }
