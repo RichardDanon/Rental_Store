@@ -4,7 +4,6 @@ struct UserView: View {
     @ObservedObject var viewModel: RentingViewModel
     @State private var showAlert = false
     @State private var userToDelete: Int?
-    @State private var showEquipmentView = false
     @State private var selectedUserIndex: Int?
     @State private var showUserDetails: Bool = false
 
@@ -33,18 +32,13 @@ struct UserView: View {
                                         .foregroundColor(.blue)
                                 }
 
+                                // This NavigationLink is used to navigate to UserDetails
                                 NavigationLink("",
                                     destination: UserDetails(user: viewModel.users[selectedUserIndex ?? 0], viewModel: viewModel),
                                     isActive: $showUserDetails
                                 ).opacity(0)
 
-                                Button(action: {
-                                    showEquipmentView = true
-                                }) {
-                                    Image(systemName: "plus.circle.fill")
-                                        .resizable()
-                                        .frame(width: 24, height: 24)
-                                }
+                                // Removed the Button with the plus
 
                                 Button(action: {
                                     userToDelete = index
@@ -75,7 +69,7 @@ struct UserView: View {
                 }
                 .padding()
             }
-            .background(NavigationLink("", destination: EquipmentView(viewModel: viewModel), isActive: $showEquipmentView))
+            // Remove the navigation to user
         }
         .alert(isPresented: $showAlert) {
             Alert(title: Text("Delete User"),
@@ -90,7 +84,6 @@ struct UserView: View {
         .navigationBarHidden(true)
     }
 }
-
 
 struct UserView_Previews: PreviewProvider {
     static var previews: some View {
