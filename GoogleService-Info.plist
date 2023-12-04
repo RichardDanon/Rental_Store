@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyAsoeh7eZrh-sFcngpTs4PY-ti9xh_BNeI</string>
+	<key>GCM_SENDER_ID</key>
+	<string>176355517969</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.girard.Rental-Store</string>
+	<key>PROJECT_ID</key>
+	<string>rentalstore-9a7eb</string>
+	<key>STORAGE_BUCKET</key>
+	<string>rentalstore-9a7eb.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:176355517969:ios:9a04a9c5697a81ebfef3b0</string>
+</dict>
+</plist>
