@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+import Firebase
+import FirebaseFirestore
+import FirebaseFirestoreSwift
 
 struct ContentView: View {
     @State private var selectedTab = 0
@@ -30,6 +33,12 @@ struct ContentView: View {
                     Label("User's View", systemImage: "person")
                 }
                 .tag(2)
+        }.onAppear() {
+            FirebaseApp.configure()
+            
+            var db = Firestore.firestore()
+            
+            print ("hi234532")
         }
     }
 }
