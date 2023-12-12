@@ -22,8 +22,8 @@
 		79A878D92AEF7DDB005A952D /* CreateGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A878D82AEF7DDB005A952D /* CreateGroup.swift */; };
 		79A878DB2AEFF983005A952D /* EquipmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A878DA2AEFF983005A952D /* EquipmentView.swift */; };
 		79A878DD2AEFFD9D005A952D /* EquipmentDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A878DC2AEFFD9D005A952D /* EquipmentDetails.swift */; };
-		79ADF6B52B280BCF00905EE8 /* FirebaseRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79ADF6B42B280BCF00905EE8 /* FirebaseRepository.swift */; };
 		79ADF6B72B2849A000905EE8 /* CreateUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79ADF6B62B2849A000905EE8 /* CreateUser.swift */; };
+		79ADF71B2B28FB0300905EE8 /* FirebaseRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79ADF71A2B28FB0300905EE8 /* FirebaseRepository.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,8 +41,8 @@
 		79A878D82AEF7DDB005A952D /* CreateGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGroup.swift; sourceTree = "<group>"; };
 		79A878DA2AEFF983005A952D /* EquipmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EquipmentView.swift; sourceTree = "<group>"; };
 		79A878DC2AEFFD9D005A952D /* EquipmentDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EquipmentDetails.swift; sourceTree = "<group>"; };
-		79ADF6B42B280BCF00905EE8 /* FirebaseRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FirebaseRepository.swift; path = ../../../FirebaseRepository.swift; sourceTree = "<group>"; };
 		79ADF6B62B2849A000905EE8 /* CreateUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateUser.swift; sourceTree = "<group>"; };
+		79ADF71A2B28FB0300905EE8 /* FirebaseRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseRepository.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,7 +107,7 @@
 		63F4B7E92ADD760900AD2B1B /* Rental_Store */ = {
 			isa = PBXGroup;
 			children = (
-				79ADF6B32B280B5E00905EE8 /* Repositories */,
+				79ADF7192B28FAB700905EE8 /* Repositories */,
 				6377F9C22B1E166B00B6E712 /* GoogleService-Info.plist */,
 				635111B12AE08FCC008E266C /* Models */,
 				635111B02AE08FBC008E266C /* ViewModels */,
@@ -128,10 +128,10 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		79ADF6B32B280B5E00905EE8 /* Repositories */ = {
+		79ADF7192B28FAB700905EE8 /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
-				79ADF6B42B280BCF00905EE8 /* FirebaseRepository.swift */,
+				79ADF71A2B28FB0300905EE8 /* FirebaseRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -214,7 +214,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				79ADF6B52B280BCF00905EE8 /* FirebaseRepository.swift in Sources */,
 				63F4B7ED2ADD760900AD2B1B /* ContentView.swift in Sources */,
 				635111B32AE0906E008E266C /* HomeView.swift in Sources */,
 				79A878D72AEF7D7C005A952D /* UserDetails.swift in Sources */,
@@ -223,6 +222,7 @@
 				79A878D52AEF7D3D005A952D /* RentingViewModel.swift in Sources */,
 				63F4B7EB2ADD760900AD2B1B /* Rental_StoreApp.swift in Sources */,
 				635111BE2AE6ABB4008E266C /* RentalModel.swift in Sources */,
+				79ADF71B2B28FB0300905EE8 /* FirebaseRepository.swift in Sources */,
 				79A878DD2AEFFD9D005A952D /* EquipmentDetails.swift in Sources */,
 				79ADF6B72B2849A000905EE8 /* CreateUser.swift in Sources */,
 				79A878D92AEF7DDB005A952D /* CreateGroup.swift in Sources */,
