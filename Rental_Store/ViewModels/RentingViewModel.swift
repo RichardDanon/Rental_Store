@@ -101,12 +101,38 @@ class RentingViewModel: ObservableObject {
         }
     }
     
-    func updateEquipmentUsages(groupID: String, equipment: Equipment, userName: String, numberOfRentals: Int) {
-        var updatedEquipment = equipment
-        // Update the usages logic
-        // Then update the equipment in Firestore
-        equipmentGroupRepository.updateDocument(in: "equipmentGroups/\(groupID)/equipment", documentID: equipment.id, document: updatedEquipment)
+    
+    func updateEquipmentUsages(groupID: String, equipmentID: String, userName: String, numberOfRentals: Int) {
+        let usage = Usage(userName: userName, numberOfRentals: numberOfRentals)
+        
+        let documentRef = Firestore.firestore().collection("equipmentGroups/\(groupID)/items").document(equipmentID)
+        documentRef.updateData([
+            "usages": FieldValue.arrayUnion([["userName": userName, "numberOfRentals": numberOfRentals]])
+        ]) { error in
+            if let error = error {
+                print("Error updating usages: \(error.localizedDescription)")
+            } else {
+                print("Usages successfully updated")
+            }
+        }
     }
+
+
+    func updateEquipmentDetails(groupID: String, updatedEquipment: Equipment) {
+        let documentRef = Firestore.firestore().collection("equipmentGroups/\(groupID)/items").document(updatedEquipment.id)
+        do {
+            try documentRef.setData(from: updatedEquipment) { error in
+                if let error = error {
+                    print("Error updating equipment details: \(error.localizedDescription)")
+                } else {
+                    print("Equipment details successfully updated")
+                }
+            }
+        } catch let error {
+            print("Error encoding equipment: \(error)")
+        }
+    }
+
     
     // Update isRenting status for a user
     func updateIsRentingStatusForUser(userName: String) {

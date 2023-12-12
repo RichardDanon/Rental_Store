@@ -30,3 +30,13 @@ struct EquipmentGroup: Codable {
     var name: String
     var items: [Equipment]
 }
+
+extension Equipment {
+    func asDictionary() throws -> [String: Any] {
+        let data = try JSONEncoder().encode(self)
+        guard let dictionary = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] else {
+            throw NSError(domain: "", code: 100, userInfo: [NSLocalizedDescriptionKey: "Could not convert to dictionary"])
+        }
+        return dictionary
+    }
+}

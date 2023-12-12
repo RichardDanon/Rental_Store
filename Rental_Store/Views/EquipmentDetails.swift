@@ -17,7 +17,6 @@ struct EquipmentDetails: View {
         self.groupID = groupID
         self.viewModel = viewModel
 
-        // Initialize the last user and number of rentals if available
         if let lastUsage = equipment.usages.last {
             _selectedUser = State(initialValue: viewModel.fetchUser(byName: lastUsage.userName))
             _numberOfRentals = State(initialValue: lastUsage.numberOfRentals)
@@ -28,7 +27,7 @@ struct EquipmentDetails: View {
         VStack {
             HStack {
                 Spacer()
-                Text("\(equipment.name) #\(equipment.id)")
+                Text("\(equipment.name)")
                     .font(.title2)
                     .fontWeight(.bold)
                 Spacer()
@@ -54,7 +53,7 @@ struct EquipmentDetails: View {
             Spacer()
 
             VStack(alignment: .leading, spacing: 20) {
-                Text("Availabilities")
+                Text("Availability")
                     .font(.headline)
                     .foregroundColor(.primary)
                 Picker("", selection: $selectedAvailability) {
@@ -90,17 +89,23 @@ struct EquipmentDetails: View {
         .actionSheet(isPresented: $showingRentPopup) {
             ActionSheet(title: Text("Choose a Renter"), buttons: viewModel.users.map { user in
                 .default(Text(user.name)) {
-                    self.selectedUser = user
-                    self.numberOfRentals += 1
-                    self.selectedAvailability = .rented
-                    var updatedEquipment = self.equipment
-                    updatedEquipment.usages.append(Usage(userName: user.name, numberOfRentals: self.numberOfRentals))
-
-                    // Use viewModel to update equipment usages
-                    viewModel.updateEquipmentUsages(groupID: self.groupID, equipment: updatedEquipment, userName: user.name, numberOfRentals: self.numberOfRentals)
+                    rentEquipment(to: user)
                 }
             } + [.cancel()])
         }
+    }
+
+    private func rentEquipment(to user: User) {
+        selectedUser = user
+        numberOfRentals += 1
+        selectedAvailability = .rented
+        var updatedEquipment = equipment
+        updatedEquipment.availability = selectedAvailability
+        updatedEquipment.usages.append(Usage(userName: user.name, numberOfRentals: numberOfRentals))
+
+        viewModel.updateEquipmentDetails(groupID: groupID, updatedEquipment: updatedEquipment)
+        
+        
     }
 }
 

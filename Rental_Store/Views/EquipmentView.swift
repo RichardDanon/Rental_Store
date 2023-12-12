@@ -41,7 +41,8 @@ struct EquipmentView: View {
                             }
                             .padding()
 
-                            ForEach(group.items, id: \.id) { equipment in
+                            let visibleEquipment = self.visibleEquipment(from: group.items)
+                            ForEach(visibleEquipment, id: \.id) { equipment in
                                 NavigationLink(
                                     destination: EquipmentDetails(equipment: equipment, groupID: group.id, viewModel: viewModel),
                                     label: {
@@ -65,6 +66,19 @@ struct EquipmentView: View {
             })
         }
         .navigationBarHidden(true)
+    }
+
+    // Find the visible equipment based on the name (only the newest with the same name)
+    func visibleEquipment(from equipments: [Equipment]) -> [Equipment] {
+        var visibleItems: [Equipment] = []
+
+        for equipment in equipments {
+            if !visibleItems.contains(where: { $0.name == equipment.name }) {
+                visibleItems.append(equipment)
+            }
+        }
+
+        return visibleItems
     }
 }
 
