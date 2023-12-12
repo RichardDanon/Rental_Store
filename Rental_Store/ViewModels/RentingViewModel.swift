@@ -172,3 +172,74 @@ class RentingViewModel: ObservableObject {
         }
     }
 }
+
+extension RentingViewModel {
+
+    // Function to match equipment to users based on the equipment's last usage
+    func matchAndAssignEquipmentToUsers(completion: @escaping () -> Void) {
+        // First, fetch all equipment groups
+        fetchEquipmentGroups {
+            // Then, fetch all users
+            self.fetchUsers {
+                // Now that we have both users and equipment, we can match them
+                self.assignEquipmentToUsers()
+                // After assignment, update the UI
+                completion()
+            }
+        }
+    }
+
+    // Helper function to assign equipment to users
+    private func assignEquipmentToUsers() {
+        // Clear previous assignments to avoid duplication
+        for index in users.indices {
+            users[index].rentingItems.removeAll()
+        }
+        
+        // Iterate over each equipment group and their items
+        for group in equipmentGroups {
+            for item in group.items {
+                // Check if the item has a usage record
+                if let latestUsage = item.usages.last {
+                    // Find the user with the matching name and assign the equipment to them
+                    if let userIndex = users.firstIndex(where: { $0.name == latestUsage.userName }) {
+                        users[userIndex].rentingItems.append(item)
+                    }
+                }
+            }
+        }
+        // Update the renting status for each user
+        updateUsersRentingStatus()
+    }
+
+    // Helper function to fetch equipment groups
+    private func fetchEquipmentGroups(completion: @escaping () -> Void) {
+        equipmentGroupRepository.fetchCollection(collectionPath: "equipmentGroups") { (groups: [EquipmentGroup]) in
+            DispatchQueue.main.async {
+                self.equipmentGroups = groups
+                completion()
+            }
+        }
+    }
+
+    // Helper function to fetch users
+    private func fetchUsers(completion: @escaping () -> Void) {
+        userRepository.fetchCollection(collectionPath: "users") { (users: [User]) in
+            DispatchQueue.main.async {
+                self.users = users
+                completion()
+            }
+        }
+    }
+
+    // Function to update the renting status for each user
+    private func updateUsersRentingStatus() {
+        for i in 0..<users.count {
+            users[i].isRenting = !users[i].rentingItems.isEmpty
+        }
+        // Notify the view to update
+        DispatchQueue.main.async {
+            self.objectWillChange.send()
+        }
+    }
+}

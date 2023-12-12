@@ -7,6 +7,7 @@ struct UserView: View {
     @State private var showUserDetails = false
     @State private var selectedUserID: String?
     @State private var showCreateUserView = false
+    @State private var refreshID = UUID() // State to refresh the view
 
     var body: some View {
         NavigationView {
@@ -18,7 +19,6 @@ struct UserView: View {
                             .padding(.leading)
                         Spacer()
 
-                        // Button to navigate to CreateUser view
                         Button(action: {
                             showCreateUserView = true
                         }) {
@@ -63,7 +63,7 @@ struct UserView: View {
                                 NavigationLink(
                                     destination: EquipmentDetails(equipment: item, groupID: "someGroupID", viewModel: viewModel),
                                     label: {
-                                        Text("\(item.name) #\(item.id)")
+                                        Text("\(item.name)")
                                     }
                                 )
                                 .padding(.vertical, 4)
@@ -77,12 +77,19 @@ struct UserView: View {
                 }
                 .padding()
             }
+            .id(refreshID) // Use the refreshID to force the view to redraw when it changes
             .navigationBarHidden(true)
             .background(
                 NavigationLink(destination: CreateUser(rentingViewModel: viewModel), isActive: $showCreateUserView) {
                     EmptyView()
                 }
             )
+        }
+        .onAppear {
+            viewModel.matchAndAssignEquipmentToUsers {
+                // Refresh the view when the users and equipment have been matched
+                self.refreshID = UUID()
+            }
         }
         .alert(isPresented: $showAlert) {
             Alert(
@@ -91,6 +98,8 @@ struct UserView: View {
                 primaryButton: .destructive(Text("Delete")) {
                     if let id = userToDeleteID {
                         viewModel.deleteUser(userID: id)
+                        // Refresh the view after deletion
+                        self.refreshID = UUID()
                     }
                 },
                 secondaryButton: .cancel()
