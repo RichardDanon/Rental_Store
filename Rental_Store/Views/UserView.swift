@@ -4,16 +4,30 @@ struct UserView: View {
     @ObservedObject var viewModel: RentingViewModel
     @State private var showAlert = false
     @State private var userToDeleteID: String?
-    @State private var showUserDetails: Bool = false
+    @State private var showUserDetails = false
     @State private var selectedUserID: String?
+    @State private var showCreateUserView = false
 
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(alignment: .leading) {
-                    Text("Renters")
-                        .font(.system(size: 35))
-                        .padding(.leading)
+                    HStack {
+                        Text("Renters")
+                            .font(.system(size: 35))
+                            .padding(.leading)
+                        Spacer()
+
+                        // Button to navigate to CreateUser view
+                        Button(action: {
+                            showCreateUserView = true
+                        }) {
+                            Image(systemName: "person.badge.plus")
+                                .resizable()
+                                .frame(width: 28, height: 28)
+                                .padding(.trailing)
+                        }
+                    }
 
                     ForEach(viewModel.users, id: \.id) { user in
                         VStack(alignment: .leading) {
@@ -63,18 +77,25 @@ struct UserView: View {
                 }
                 .padding()
             }
+            .navigationBarHidden(true)
+            .background(
+                NavigationLink(destination: CreateUser(rentingViewModel: viewModel), isActive: $showCreateUserView) {
+                    EmptyView()
+                }
+            )
         }
         .alert(isPresented: $showAlert) {
-            Alert(title: Text("Delete User"),
-                  message: Text("Are you sure you want to delete this user and all the items they are renting?"),
-                  primaryButton: .destructive(Text("Delete")) {
-                      if let id = userToDeleteID {
-                          viewModel.deleteUser(userID: id)
-                      }
-                  },
-                  secondaryButton: .cancel())
+            Alert(
+                title: Text("Delete User"),
+                message: Text("Are you sure you want to delete this user and all the items they are renting?"),
+                primaryButton: .destructive(Text("Delete")) {
+                    if let id = userToDeleteID {
+                        viewModel.deleteUser(userID: id)
+                    }
+                },
+                secondaryButton: .cancel()
+            )
         }
-        .navigationBarHidden(true)
     }
 }
 

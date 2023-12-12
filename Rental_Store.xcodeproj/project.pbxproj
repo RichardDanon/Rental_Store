@@ -23,6 +23,7 @@
 		79A878DB2AEFF983005A952D /* EquipmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A878DA2AEFF983005A952D /* EquipmentView.swift */; };
 		79A878DD2AEFFD9D005A952D /* EquipmentDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A878DC2AEFFD9D005A952D /* EquipmentDetails.swift */; };
 		79ADF6B52B280BCF00905EE8 /* FirebaseRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79ADF6B42B280BCF00905EE8 /* FirebaseRepository.swift */; };
+		79ADF6B72B2849A000905EE8 /* CreateUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79ADF6B62B2849A000905EE8 /* CreateUser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 		79A878DA2AEFF983005A952D /* EquipmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EquipmentView.swift; sourceTree = "<group>"; };
 		79A878DC2AEFFD9D005A952D /* EquipmentDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EquipmentDetails.swift; sourceTree = "<group>"; };
 		79ADF6B42B280BCF00905EE8 /* FirebaseRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FirebaseRepository.swift; path = ../../../FirebaseRepository.swift; sourceTree = "<group>"; };
+		79ADF6B62B2849A000905EE8 /* CreateUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateUser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +67,7 @@
 				79A878D82AEF7DDB005A952D /* CreateGroup.swift */,
 				79A878DA2AEFF983005A952D /* EquipmentView.swift */,
 				79A878DC2AEFFD9D005A952D /* EquipmentDetails.swift */,
+				79ADF6B62B2849A000905EE8 /* CreateUser.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -221,6 +224,7 @@
 				63F4B7EB2ADD760900AD2B1B /* Rental_StoreApp.swift in Sources */,
 				635111BE2AE6ABB4008E266C /* RentalModel.swift in Sources */,
 				79A878DD2AEFFD9D005A952D /* EquipmentDetails.swift in Sources */,
+				79ADF6B72B2849A000905EE8 /* CreateUser.swift in Sources */,
 				79A878D92AEF7DDB005A952D /* CreateGroup.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
