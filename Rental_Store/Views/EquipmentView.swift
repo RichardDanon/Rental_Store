@@ -25,32 +25,27 @@ struct EquipmentView: View {
                     }
                     .padding(.vertical)
 
-                    ForEach(viewModel.equipmentGroups.indices, id: \.self) { index in
+                    ForEach(viewModel.equipmentGroups, id: \.id) { group in
                         VStack(alignment: .leading) {
                             HStack {
-                                Text(viewModel.equipmentGroups[index].name)
+                                Text(group.name)
                                     .font(.headline)
                                 Spacer()
                                 Button(action: {
-                                    let groupName = viewModel.equipmentGroups[index].name
-                                    let newID = viewModel.getNextEquipmentID(forGroup: viewModel.equipmentGroups[index])
-                                    let newItem = Equipment(id: newID, name: groupName, availability: .free, usages: [])
-                                    viewModel.equipmentGroups[index].items.append(newItem)
+                                    viewModel.addEquipmentToGroup(groupID: group.id)
                                 }) {
                                     Image(systemName: "plus.circle.fill")
                                         .resizable()
                                         .frame(width: 24, height: 24)
                                 }
-
-                                // Removed Button with the "trash.circle.fill" icon
                             }
                             .padding()
 
-                            ForEach(viewModel.equipmentGroups[index].items, id: \.id) { equipment in
+                            ForEach(group.items, id: \.id) { equipment in
                                 NavigationLink(
-                                    destination: EquipmentDetails(equipment: equipment, viewModel: viewModel),
+                                    destination: EquipmentDetails(equipment: equipment, groupID: group.id, viewModel: viewModel),
                                     label: {
-                                        Text("\(equipment.name) #\(equipment.id)")
+                                        Text(equipment.name)
                                     }
                                 )
                                 .padding(.vertical, 4)
@@ -70,7 +65,6 @@ struct EquipmentView: View {
             })
         }
         .navigationBarHidden(true)
-        // Removed alert for deletion
     }
 }
 

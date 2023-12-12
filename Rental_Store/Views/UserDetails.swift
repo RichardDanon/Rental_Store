@@ -1,77 +1,76 @@
-//
-//  UserDetails.swift
-//  Rental_Store
-//
-//  Created by Richard on 2023-10-30.
-//
-
 import SwiftUI
 
 struct UserDetails: View {
-    var user: User
-     var viewModel: RentingViewModel
-    
+    @ObservedObject var viewModel: RentingViewModel
+    var userID: String
+
+    var user: User? {
+        viewModel.users.first { $0.id == userID }
+    }
+
     var body: some View {
         VStack(alignment: .leading) {
-            Text(user.name)
-                .font(.largeTitle)
-                .padding()
-            
-            VStack(alignment: .leading, spacing: 10) {
-                HStack {
-                    Text("Phone Number")
-                    Spacer()
-                    Text(user.phoneNumber)
-                }
-                
-                HStack {
-                    Text("Email")
-                    Spacer()
-                    Text(user.email)
-                }
-                
-                HStack {
-                    Text("Is Renting")
-                    Spacer()
-                    if user.isRenting {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundColor(.green)
-                    } else {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundColor(.red)
-                    }
-                }
-                
-                Divider().padding(.vertical, 10)
-                
-                Text("Items Being Rented")
-                    .font(.headline)
-                
-                ForEach(user.rentingItems, id: \.id) { item in
+            if let user = user {
+                Text(user.name)
+                    .font(.largeTitle)
+                    .padding()
+
+                VStack(alignment: .leading, spacing: 10) {
                     HStack {
-                        Text(item.name)
+                        Text("Phone Number")
                         Spacer()
-                        Text("Id: \(item.id)")
+                        Text(user.phoneNumber)
+                    }
+
+                    HStack {
+                        Text("Email")
+                        Spacer()
+                        Text(user.email)
+                    }
+
+                    HStack {
+                        Text("Is Renting")
+                        Spacer()
+                        if user.isRenting {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(.green)
+                        } else {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundColor(.red)
+                        }
+                    }
+
+                    Divider().padding(.vertical, 10)
+
+                    Text("Items Being Rented")
+                        .font(.headline)
+
+                    ForEach(user.rentingItems, id: \.id) { item in
+                        HStack {
+                            Text(item.name)
+                            Spacer()
+                            Text("Id: \(item.id)")
+                        }
                     }
                 }
+                .padding()
+
+                Spacer()
             }
-            .padding()
-            
-            Spacer()
         }
-        .navigationBarTitle(user.name, displayMode: .inline)
+        .navigationBarTitle(user?.name ?? "User Details", displayMode: .inline)
     }
 }
 
 struct UserDetails_Previews: PreviewProvider {
     static var previews: some View {
-        let mockUsage: [Usage] = [Usage(userName: "Alice", numberOfRentals: 1)]
-        let mockEquipment = Equipment(id: "1", name: "Mock Equipment", availability: .free, usages: mockUsage)
-        
-        let mockUser = User(name: "Alice", phoneNumber: "123-456-7890", email: "alice@email.com", isRenting: true, rentingItems: [mockEquipment])
-        
+        // Assuming you have a way to provide a sample user ID for preview
+        let sampleUserID = "sampleUserID"
+
+        // Assuming your ViewModel can handle being initialized without actual Firebase data
         let viewModel = RentingViewModel()
 
-        return UserDetails(user: mockUser, viewModel: viewModel)
+        return UserDetails(viewModel: viewModel, userID: sampleUserID)
     }
 }
+

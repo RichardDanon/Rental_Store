@@ -3,9 +3,9 @@ import SwiftUI
 struct UserView: View {
     @ObservedObject var viewModel: RentingViewModel
     @State private var showAlert = false
-    @State private var userToDelete: Int?
-    @State private var selectedUserIndex: Int?
+    @State private var userToDeleteID: String?
     @State private var showUserDetails: Bool = false
+    @State private var selectedUserID: String?
 
     var body: some View {
         NavigationView {
@@ -15,15 +15,15 @@ struct UserView: View {
                         .font(.system(size: 35))
                         .padding(.leading)
 
-                    ForEach(viewModel.users.indices, id: \.self) { index in
+                    ForEach(viewModel.users, id: \.id) { user in
                         VStack(alignment: .leading) {
                             HStack {
-                                Text(viewModel.users[index].name)
+                                Text(user.name)
                                     .font(.headline)
                                 Spacer()
 
                                 Button(action: {
-                                    selectedUserIndex = index
+                                    selectedUserID = user.id
                                     showUserDetails = true
                                 }) {
                                     Image(systemName: "info.circle")
@@ -32,16 +32,10 @@ struct UserView: View {
                                         .foregroundColor(.blue)
                                 }
 
-                                // This NavigationLink is used to navigate to UserDetails
-                                NavigationLink("",
-                                    destination: UserDetails(user: viewModel.users[selectedUserIndex ?? 0], viewModel: viewModel),
-                                    isActive: $showUserDetails
-                                ).opacity(0)
-
-                                // Removed the Button with the plus
+                                NavigationLink("", destination: UserDetails(viewModel: viewModel, userID: user.id), isActive: $showUserDetails).hidden()
 
                                 Button(action: {
-                                    userToDelete = index
+                                    userToDeleteID = user.id
                                     showAlert = true
                                 }) {
                                     Image(systemName: "trash.circle.fill")
@@ -51,9 +45,9 @@ struct UserView: View {
                             }
                             .padding()
 
-                            ForEach(viewModel.users[index].rentingItems, id: \.id) { item in
+                            ForEach(user.rentingItems, id: \.id) { item in
                                 NavigationLink(
-                                    destination: EquipmentDetails(equipment: item, viewModel: viewModel),
+                                    destination: EquipmentDetails(equipment: item, groupID: "someGroupID", viewModel: viewModel),
                                     label: {
                                         Text("\(item.name) #\(item.id)")
                                     }
@@ -69,14 +63,13 @@ struct UserView: View {
                 }
                 .padding()
             }
-            // Remove the navigation to user
         }
         .alert(isPresented: $showAlert) {
             Alert(title: Text("Delete User"),
                   message: Text("Are you sure you want to delete this user and all the items they are renting?"),
                   primaryButton: .destructive(Text("Delete")) {
-                      if let index = userToDelete {
-                          viewModel.users.remove(at: index)
+                      if let id = userToDeleteID {
+                          viewModel.deleteUser(userID: id)
                       }
                   },
                   secondaryButton: .cancel())

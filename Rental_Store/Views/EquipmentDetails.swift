@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct EquipmentDetails: View {
-    var equipment: Equipment
+    @State var equipment: Equipment
     @State private var selectedAvailability: Availability
     @State private var showingRentPopup = false
     @State private var showingDeleteAlert = false
@@ -9,20 +9,21 @@ struct EquipmentDetails: View {
     @State private var selectedUser: User?
     @State private var numberOfRentals: Int = 0
     @Environment(\.presentationMode) var presentationMode
-    
-    init(equipment: Equipment, viewModel: RentingViewModel) {
-        self.equipment = equipment
-        self.viewModel = viewModel
+    var groupID: String
+
+    init(equipment: Equipment, groupID: String, viewModel: RentingViewModel) {
+        _equipment = State(initialValue: equipment)
         _selectedAvailability = State(initialValue: equipment.availability)
-        
-        // Fetch the latest user and number of rentals from the equipment's usages
-        if let lastUsage = equipment.usages.last,
-           let user = viewModel.fetchUser(byName: lastUsage.userName) {
-            _selectedUser = State(initialValue: user)
+        self.groupID = groupID
+        self.viewModel = viewModel
+
+        // Initialize the last user and number of rentals if available
+        if let lastUsage = equipment.usages.last {
+            _selectedUser = State(initialValue: viewModel.fetchUser(byName: lastUsage.userName))
             _numberOfRentals = State(initialValue: lastUsage.numberOfRentals)
         }
     }
-    
+
     var body: some View {
         VStack {
             HStack {
@@ -31,6 +32,7 @@ struct EquipmentDetails: View {
                     .font(.title2)
                     .fontWeight(.bold)
                 Spacer()
+
                 Button(action: {
                     showingDeleteAlert = true
                 }) {
@@ -41,9 +43,9 @@ struct EquipmentDetails: View {
                     Alert(title: Text("Delete Item"),
                           message: Text("Are you sure you want to delete this item?"),
                           primaryButton: .destructive(Text("Delete")) {
-                        viewModel.deleteEquipment(equipmentID: equipment.id)
-                        presentationMode.wrappedValue.dismiss()
-                    },
+                            viewModel.deleteEquipment(groupID: groupID, equipmentID: equipment.id)
+                            presentationMode.wrappedValue.dismiss()
+                          },
                           secondaryButton: .cancel())
                 }
                 .padding(.trailing, 20)
@@ -66,6 +68,7 @@ struct EquipmentDetails: View {
                     .foregroundColor(.primary)
                 Text("Last User: \(selectedUser?.name ?? "None")")
                 Text("Number of Rentals: \(numberOfRentals)")
+
                 Button(action: {
                     showingRentPopup = true
                 }) {
@@ -86,13 +89,16 @@ struct EquipmentDetails: View {
         .padding()
         .actionSheet(isPresented: $showingRentPopup) {
             ActionSheet(title: Text("Choose a Renter"), buttons: viewModel.users.map { user in
-                    .default(Text(user.name)) {
-                        selectedUser = user
-                        numberOfRentals += 1
-                        selectedAvailability = .rented
-                        viewModel.updateEquipmentUsages(equipment: equipment, userName: user.name, numberOfRentals: numberOfRentals)
-                    }
+                .default(Text(user.name)) {
+                    self.selectedUser = user
+                    self.numberOfRentals += 1
+                    self.selectedAvailability = .rented
+                    var updatedEquipment = self.equipment
+                    updatedEquipment.usages.append(Usage(userName: user.name, numberOfRentals: self.numberOfRentals))
 
+                    // Use viewModel to update equipment usages
+                    viewModel.updateEquipmentUsages(groupID: self.groupID, equipment: updatedEquipment, userName: user.name, numberOfRentals: self.numberOfRentals)
+                }
             } + [.cancel()])
         }
     }
@@ -102,9 +108,10 @@ struct EquipmentDetails_Previews: PreviewProvider {
     static var previews: some View {
         let mockUsage: [Usage] = [Usage(userName: "Alice", numberOfRentals: 1)]
         let mockEquipment = Equipment(id: "1", name: "Mock Equipment", availability: .free, usages: mockUsage)
+        let groupID = "mockGroupID"
         
         let viewModel = RentingViewModel()
         
-        return EquipmentDetails(equipment: mockEquipment, viewModel: viewModel)
+        return EquipmentDetails(equipment: mockEquipment, groupID: groupID, viewModel: viewModel)
     }
 }

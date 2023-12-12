@@ -53,7 +53,7 @@ struct CreateGroup: View {
         .alert(isPresented: $showAlert) {
             Alert(
                 title: Text("Confirm Creation"),
-                message: Text("Do you want to create this group?"),
+                message: Text("Do you want to create this group named \(groupName)?"),
                 primaryButton: .default(Text("OK")) {
                     equipmentViewModel.createEquipmentGroup(withName: groupName)
                     self.presentationMode.wrappedValue.dismiss()
