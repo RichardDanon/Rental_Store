@@ -39,13 +39,15 @@ struct EquipmentDetails: View {
                         .foregroundColor(.red)
                 }
                 .alert(isPresented: $showingDeleteAlert) {
-                    Alert(title: Text("Delete Item"),
-                          message: Text("Are you sure you want to delete this item?"),
-                          primaryButton: .destructive(Text("Delete")) {
-                            viewModel.deleteEquipment(groupID: groupID, equipmentID: equipment.id)
+                    Alert(
+                        title: Text("Delete Item"),
+                        message: Text("Are you sure you want to delete this item?"),
+                        primaryButton: .destructive(Text("Delete")) {
+                            viewModel.deleteEquipmentItem(groupID: groupID, equipmentID: equipment.id)
                             presentationMode.wrappedValue.dismiss()
-                          },
-                          secondaryButton: .cancel())
+                        },
+                        secondaryButton: .cancel()
+                    )
                 }
                 .padding(.trailing, 20)
             }
@@ -104,8 +106,6 @@ struct EquipmentDetails: View {
         updatedEquipment.usages.append(Usage(userName: user.name, numberOfRentals: numberOfRentals))
 
         viewModel.updateEquipmentDetails(groupID: groupID, updatedEquipment: updatedEquipment)
-        
-        
     }
 }
 
@@ -114,9 +114,7 @@ struct EquipmentDetails_Previews: PreviewProvider {
         let mockUsage: [Usage] = [Usage(userName: "Alice", numberOfRentals: 1)]
         let mockEquipment = Equipment(id: "1", name: "Mock Equipment", availability: .free, usages: mockUsage)
         let groupID = "mockGroupID"
-        
         let viewModel = RentingViewModel()
-        
         return EquipmentDetails(equipment: mockEquipment, groupID: groupID, viewModel: viewModel)
     }
 }

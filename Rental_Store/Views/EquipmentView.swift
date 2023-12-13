@@ -3,6 +3,8 @@ import SwiftUI
 struct EquipmentView: View {
     @ObservedObject var viewModel: RentingViewModel
     @State private var showCreateGroupView = false
+    @State private var showAlert = false
+    @State private var groupToDeleteID: String?
 
     var body: some View {
         NavigationView {
@@ -38,6 +40,16 @@ struct EquipmentView: View {
                                         .resizable()
                                         .frame(width: 24, height: 24)
                                 }
+
+                                Button(action: {
+                                    self.groupToDeleteID = group.id
+                                    self.showAlert = true
+                                }) {
+                                    Image(systemName: "minus.circle.fill")
+                                        .resizable()
+                                        .frame(width: 24, height: 24)
+                                        .foregroundColor(.red)
+                                }
                             }
                             .padding()
 
@@ -64,6 +76,18 @@ struct EquipmentView: View {
             .background(NavigationLink(destination: CreateGroup(equipmentViewModel: viewModel), isActive: $showCreateGroupView) {
                 EmptyView()
             })
+            .alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text("Delete Equipment Group"),
+                    message: Text("Are you sure you want to delete this group and all its items? This action cannot be undone."),
+                    primaryButton: .destructive(Text("Delete")) {
+                        if let groupID = self.groupToDeleteID {
+                            viewModel.deleteEquipmentGroup(groupID: groupID)
+                        }
+                    },
+                    secondaryButton: .cancel()
+                )
+            }
         }
         .navigationBarHidden(true)
     }

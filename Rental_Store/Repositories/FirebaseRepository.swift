@@ -10,7 +10,7 @@ import FirebaseFirestoreSwift
 
 class FirebaseRepository: ObservableObject {
     private let store = Firestore.firestore()
-
+    
     // Fetch all documents in a collection
     func fetchCollection<T: Codable>(collectionPath: String, completion: @escaping ([T]) -> Void) {
         store.collection(collectionPath).addSnapshotListener { snapshot, error in
@@ -26,7 +26,7 @@ class FirebaseRepository: ObservableObject {
             }
         }
     }
-
+    
     // Add a document to a collection
     func addDocument<T: Codable>(to collectionPath: String, document: T) {
         do {
@@ -35,7 +35,7 @@ class FirebaseRepository: ObservableObject {
             fatalError("Adding document failed: \(error)")
         }
     }
-
+    
     // Update a document in a collection
     func updateDocument<T: Codable>(in collectionPath: String, documentID: String, document: T) {
         do {
@@ -45,17 +45,17 @@ class FirebaseRepository: ObservableObject {
         }
     }
     
-//    func updateDocumentFields(in collectionPath: String, documentID: String, fields: [String: Any]) {
-//        let documentRef = store.collection(collectionPath).document(documentID)
-//        documentRef.updateData(fields) { error in
-//            if let error = error {
-//                print("Error updating document fields: \(error)")
-//            } else {
-//                print("Document successfully updated")
-//            }
-//        }
-//    }
-
+    //    func updateDocumentFields(in collectionPath: String, documentID: String, fields: [String: Any]) {
+    //        let documentRef = store.collection(collectionPath).document(documentID)
+    //        documentRef.updateData(fields) { error in
+    //            if let error = error {
+    //                print("Error updating document fields: \(error)")
+    //            } else {
+    //                print("Document successfully updated")
+    //            }
+    //        }
+    //    }
+    
     func updateDocumentFields(in collectionPath: String, documentID: String, fields: [String: Any]) {
         let documentRef = store.collection(collectionPath).document(documentID)
         documentRef.updateData(fields) { error in
@@ -66,8 +66,8 @@ class FirebaseRepository: ObservableObject {
             }
         }
     }
-
-
+    
+    
     // Add data to a subcollection within a document
     func addToSubcollection<T: Codable>(in collectionPath: String, documentID: String, subcollection: String, data: T) {
         let subcollectionRef = store.collection(collectionPath).document(documentID).collection(subcollection)
@@ -77,7 +77,7 @@ class FirebaseRepository: ObservableObject {
             print("Adding data to subcollection failed: \(error)")
         }
     }
-
+    
     // Delete a document from a collection
     func deleteDocument(from collectionPath: String, documentID: String) {
         store.collection(collectionPath).document(documentID).delete { error in
@@ -86,29 +86,38 @@ class FirebaseRepository: ObservableObject {
             }
         }
     }
-
-    // Delete a collection and its contents
-    func deleteCollection(collectionPath: String, batchSize: Int = 100) {
+    
+    // In FirebaseRepository.swift
+    
+    // Delete a collection and its documents in batches
+    func deleteCollection(collectionPath: String, batchSize: Int = 100, completion: @escaping () -> Void) {
         let collectionRef = store.collection(collectionPath)
-        deleteCollectionStep(collectionRef: collectionRef, batchSize: batchSize)
+        deleteCollectionStep(collectionRef: collectionRef, batchSize: batchSize, completion: completion)
     }
-
-    private func deleteCollectionStep(collectionRef: CollectionReference, batchSize: Int) {
+    
+    private func deleteCollectionStep(collectionRef: CollectionReference, batchSize: Int, completion: @escaping () -> Void) {
         collectionRef.limit(to: batchSize).getDocuments { snapshot, error in
             guard let snapshot = snapshot else {
                 print("Error fetching documents to delete: \(error?.localizedDescription ?? "Unknown error")")
+                completion()
                 return
             }
-            guard !snapshot.isEmpty else { return }
-
+            
+            guard !snapshot.isEmpty else {
+                completion() // Nothing to delete, so we're done
+                return
+            }
+            
             let batch = self.store.batch()
             snapshot.documents.forEach { batch.deleteDocument($0.reference) }
-
-            batch.commit { error in
-                if let error = error {
-                    print("Delete batch failed: \(error)")
-                } else if snapshot.count >= batchSize {
-                    self.deleteCollectionStep(collectionRef: collectionRef, batchSize: batchSize)
+            
+            batch.commit { err in
+                if let err = err {
+                    print("Error deleting batch: \(err)")
+                    completion()
+                } else {
+                    // Recurse to delete the next batch
+                    self.deleteCollectionStep(collectionRef: collectionRef, batchSize: batchSize, completion: completion)
                 }
             }
         }

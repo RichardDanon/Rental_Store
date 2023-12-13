@@ -175,6 +175,43 @@ class RentingViewModel: ObservableObject {
 
 extension RentingViewModel {
 
+    // Delete an entire equipment group and all its items
+    func deleteEquipmentGroup(groupID: String) {
+        // Step 1: Delete all items within the group
+        equipmentGroupRepository.deleteCollection(collectionPath: "equipmentGroups/\(groupID)/items", batchSize: 100) {
+            // Step 2: Once all items are deleted, delete the group document itself
+            self.equipmentGroupRepository.deleteDocument(from: "equipmentGroups", documentID: groupID)
+
+            // Step 3: Update local state
+            if let index = self.equipmentGroups.firstIndex(where: { $0.id == groupID }) {
+                self.equipmentGroups.remove(at: index)
+                DispatchQueue.main.async {
+                    self.objectWillChange.send()
+                }
+            }
+        }
+    }
+
+    // Delete a single equipment item from a group
+    func deleteEquipmentItem(groupID: String, equipmentID: String) {
+        // Delete the document for the equipment item
+        equipmentGroupRepository.deleteDocument(from: "equipmentGroups/\(groupID)/items", documentID: equipmentID)
+
+        // Update local state
+        if let groupIndex = self.equipmentGroups.firstIndex(where: { $0.id == groupID }),
+           let itemIndex = self.equipmentGroups[groupIndex].items.firstIndex(where: { $0.id == equipmentID }) {
+            self.equipmentGroups[groupIndex].items.remove(at: itemIndex)
+            DispatchQueue.main.async {
+                self.objectWillChange.send()
+            }
+        }
+    }
+}
+
+
+
+extension RentingViewModel {
+
     // Function to match equipment to users based on the equipment's last usage
     func matchAndAssignEquipmentToUsers(completion: @escaping () -> Void) {
         // First, fetch all equipment groups
