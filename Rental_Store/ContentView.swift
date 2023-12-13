@@ -1,16 +1,8 @@
-//
-//  ContentView.swift
-//  Rental_Store
-//
-//  Created by macuser on 2023-10-16.
-//
-
 import SwiftUI
-
 
 struct ContentView: View {
     @State private var selectedTab = 0
-    let rentingModel = RentingViewModel()
+    @StateObject var rentingModel = RentingViewModel() // Use StateObject for owning the ViewModel
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -40,4 +32,3 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
-
